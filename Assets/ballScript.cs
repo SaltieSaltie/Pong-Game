@@ -1,17 +1,11 @@
 using UnityEngine;
-using TMPro;
 
 public class ballScript : MonoBehaviour
 {
     public Rigidbody2D rb;
     public float startingSpeed;
-
-    public TextMeshProUGUI playerOneScoreText;  //these references dont work because they need to be attached to an empty object (UI) with a seperate code.
-    public TextMeshProUGUI playerTwoScoreText;
-
-    private int playerOneScore = 0;
-    private int playerTwoScore = 0;
-
+    public float speedMultiplier;
+    public float maxSpeed;
 
     void Start()
     {
@@ -48,27 +42,33 @@ public class ballScript : MonoBehaviour
         rb.velocity = new Vector2 (xVelocity * startingSpeed, yVelocity * startingSpeed);
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("paddle"))
+        {
+            rb.velocity *= speedMultiplier;
+
+            rb.velocity = rb.velocity.normalized * rb.velocity.magnitude;
+
+            if (rb.velocity.magnitude > maxSpeed)
+            {
+                rb.velocity = rb.velocity.normalized * maxSpeed;
+            }
+        }
+    }
+
     void Update()
     {
         Vector2 screenBounds = Camera.main.ScreenToWorldPoint(new Vector2 (Screen.width, Screen.height));
 
         if (transform.position.x > screenBounds.x)      //first player scores
         {
-            playerOneScore++;
-
-            playerOneScoreText.text = playerOneScore.ToString();
-
             resetBall();
         }
 
         if (transform.position.x < -screenBounds.x)     //second player scores
         {
-            playerTwoScore++;
-
-            playerTwoScoreText.text = playerTwoScore.ToString();
-
             resetBall ();
         }
-
     }
 }
