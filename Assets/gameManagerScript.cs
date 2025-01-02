@@ -38,7 +38,19 @@ public class gameManagerScript : MonoBehaviour
             playerTwoScoreText.text = playerTwoScore.ToString();
         }
 
+        if (Input.GetKey(KeyCode.R))    //Reset the score.  
+        {
+            playerOneScore = 0;
+            playerTwoScore = 0;
 
+            playerOneScoreText.text = 0.ToString();
+            playerTwoScoreText.text = 0.ToString();
+        }
+
+        if (Input.GetKey(KeyCode.Escape))   //Quit the game.
+        {
+            Application.Quit();
+        }
 
     }
 }
